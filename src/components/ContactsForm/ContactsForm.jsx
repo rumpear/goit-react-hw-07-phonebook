@@ -84,7 +84,7 @@ export const ContactsForm = () => {
   //   }
   // }, [error]);
 
-  if (error) return;
+  // if (error) return;
   // console.log('error', error);
 
   return (
