@@ -78,14 +78,11 @@ export const ContactsForm = () => {
     setIsLoading(false);
   }, [contacts]);
 
-  // useEffect(() => {
-  //   if (error) {
-  //     setIsLoading(false);
-  //   }
-  // }, [error]);
-
-  // if (error) return;
-  // console.log('error', error);
+  useEffect(() => {
+    if (error) {
+      setIsLoading(false);
+    }
+  }, [error]);
 
   return (
     <>
@@ -116,7 +113,7 @@ export const ContactsForm = () => {
             onChange={setPhone}
             required={'required'}
           />
-          <Button type="submit" disabled={isLoading}>
+          <Button type="submit" disabled={error || isLoading}>
             {isLoading ? (
               <>
                 <ClipLoader

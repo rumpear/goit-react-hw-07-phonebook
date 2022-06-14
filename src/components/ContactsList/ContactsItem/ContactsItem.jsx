@@ -7,19 +7,23 @@ import { useState } from 'react';
 import { getErrorValue } from '../../../redux/contactsSelectors';
 // import { ErrorMessage } from '../../ui/ErrorMessage';
 import { Loader } from '../../ui/Loader';
+import { useEffect } from 'react';
 
 export const ContactsItem = ({ id, name, number }) => {
   // const isLoading = useSelector(state => state.contacts.isLoading);
   const dispatch = useDispatch();
   const error = useSelector(getErrorValue);
-
   const [loading, setLoading] = useState(false);
+
   const handleDeleteContact = currentId => {
     if (id === currentId) setLoading(true);
     dispatch(removeContact(currentId));
   };
 
-  if (error) setLoading(false);
+  useEffect(() => {
+    if (error) setLoading(false);
+    return;
+  }, [error]);
 
   return (
     <Item>
@@ -27,10 +31,12 @@ export const ContactsItem = ({ id, name, number }) => {
       <Text>{number}</Text>
       <Button
         type="button"
-        disabled={loading}
+        disabled={loading || error}
         onClick={() => handleDeleteContact(id)}
       >
         {loading ? <Loader size={15} /> : <VscClose size={20} />}
+        {/* {loading && !error ? <Loader size={15} /> : <VscClose size={20} />} */}
+        {/* {error && <VscClose size={20} />} */}
       </Button>
     </Item>
   );
