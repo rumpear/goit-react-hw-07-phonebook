@@ -6,7 +6,7 @@ const contactsAsyncSlice = createSlice({
   initialState: { entities: [], filter: '', isLoading: false, error: null },
   reducers: {
     updateFilter(state, { payload }) {
-      state.filter = payload;
+      return { ...state, filter: payload };
     },
   },
   extraReducers: {
@@ -18,11 +18,10 @@ const contactsAsyncSlice = createSlice({
       };
     },
     [fetchContacts.pending]: state => {
-      state.isLoading = true;
+      return { ...state, isLoading: true };
     },
     [fetchContacts.rejected]: (state, { payload }) => {
-      state.error = payload;
-      state.isLoading = false;
+      return { ...state, error: payload, isLoading: false };
     },
     [addContact.fulfilled]: (state, { payload }) => {
       return {
@@ -32,11 +31,10 @@ const contactsAsyncSlice = createSlice({
       };
     },
     [addContact.pending]: state => {
-      state.isLoading = true;
+      return { ...state, isLoading: true };
     },
     [addContact.rejected]: (state, { payload }) => {
-      state.error = payload;
-      state.isLoading = false;
+      return { ...state, error: payload, isLoading: false };
     },
     [removeContact.fulfilled]: (state, { payload }) => {
       return {
@@ -48,11 +46,10 @@ const contactsAsyncSlice = createSlice({
       };
     },
     [removeContact.pending]: state => {
-      state.isLoading = true;
+      return { ...state, isLoading: true };
     },
     [removeContact.rejected]: (state, { payload }) => {
-      state.error = payload;
-      state.isLoading = false;
+      return { ...state, error: payload, isLoading: false };
     },
   },
 });
