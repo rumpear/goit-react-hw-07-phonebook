@@ -9,7 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from '../../redux/contactsOperations';
 import {
   getContactsValue,
-  getIsLoadingValue,
+  getErrorValue,
+  // getIsLoadingValue,
 } from '../../redux/contactsSelectors';
 import {
   FormBody,
@@ -19,6 +20,8 @@ import {
   Error,
   PhoneField,
 } from './ContactsForm.styled';
+import { useEffect } from 'react';
+import { ErrorMessage as ErrorMessageComponent } from '../ui/ErrorMessage';
 
 const schema = yup.object().shape({
   name: yup
@@ -31,7 +34,9 @@ const schema = yup.object().shape({
 export const ContactsForm = () => {
   const [phone, setPhone] = useState('');
   const contacts = useSelector(getContactsValue);
-  const isLoading = useSelector(getIsLoadingValue);
+  // const isLoading = useSelector(getIsLoadingValue);
+  const error = useSelector(getErrorValue);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
   const checkDuplicateName = nameToAdd => {
@@ -65,11 +70,26 @@ export const ContactsForm = () => {
       number,
     };
 
+    setIsLoading(true);
     dispatch(addContact(contact));
   };
 
+  useEffect(() => {
+    setIsLoading(false);
+  }, [contacts]);
+
+  // useEffect(() => {
+  //   if (error) {
+  //     setIsLoading(false);
+  //   }
+  // }, [error]);
+
+  if (error) return;
+  // console.log('error', error);
+
   return (
     <>
+      {error && <ErrorMessageComponent message={error} />}
       <Formik
         initialValues={{
           name: '',

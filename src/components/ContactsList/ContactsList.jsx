@@ -11,10 +11,12 @@ import { ContactsItem } from './ContactsItem';
 // import { Loader } from '../ui/Loader';
 import { ErrorMessage } from '../ui/ErrorMessage';
 import { List, Text } from './ContactsList.styled';
+// import { useState } from 'react';
 
 export const ContactsList = () => {
   const contacts = useSelector(getContactsValue);
   // const isLoading = useSelector(getIsLoadingValue);
+  // const [isLoading, setIsLoading] = useState(false);
   const error = useSelector(getErrorValue);
   const filterValue = useSelector(getFilterValue);
   const dispatch = useDispatch();
@@ -27,11 +29,12 @@ export const ContactsList = () => {
     return name.toLowerCase().includes(filterValue.toLowerCase());
   });
 
-  if (error) return <ErrorMessage />;
+  // if (error) return <ErrorMessage message={error} />;
   // if (isLoading) return <Loader size={50} />;
 
   return (
     <div>
+      {error && <ErrorMessage message={error} />}
       {filteredContacts.length ? (
         <List>
           {filteredContacts.map(({ id, name, phone }) => (

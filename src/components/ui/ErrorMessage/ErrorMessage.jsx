@@ -1,3 +1,9 @@
-export const ErrorMessage = ({ errorMessage }) => {
-  return <p>Something went wrong: {errorMessage}</p>;
+import PropTypes from 'prop-types';
+
+export const ErrorMessage = ({ message }) => {
+  return <p>Something went wrong: {message}. Please reload the page</p>;
+};
+
+ErrorMessage.propTypes = {
+  message: PropTypes.string.isRequired,
 };

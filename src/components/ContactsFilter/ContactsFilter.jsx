@@ -1,9 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { updateFilter } from '../../redux/contactsAsyncSlice';
+import { getFilterValue } from '../../redux/contactsSelectors';
 import { Title, Input } from './ContactsFilter.styled';
 
 export const ContactsFilter = () => {
-  const filterValue = useSelector(state => state.contacts.filter);
+  const filterValue = useSelector(getFilterValue);
   const dispatch = useDispatch();
 
   const handleSearchContact = e => {
