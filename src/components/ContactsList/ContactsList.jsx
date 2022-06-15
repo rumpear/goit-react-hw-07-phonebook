@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import { fetchContacts } from '../../redux/contactsOperations';
 import {
   getContactsValue,
-  getErrorValue,
   getFilterValue,
 } from '../../redux/contactsSelectors';
 import { ContactsItem } from './ContactsItem';
@@ -15,7 +14,6 @@ import { useState } from 'react';
 export const ContactsList = () => {
   const contacts = useSelector(getContactsValue);
   const [isLoading, setIsLoading] = useState(false);
-  const error = useSelector(getErrorValue);
   const filterValue = useSelector(getFilterValue);
   const dispatch = useDispatch();
 
