@@ -7,10 +7,6 @@ import {
 
 export const fetchContacts = createAsyncThunk(
   'contacts/getContacts',
-  // async () => {
-  //   const res = await getContacts();
-  //   return res;
-  // }
   async (_, { rejectWithValue }) => {
     try {
       const res = await getContacts();
@@ -29,6 +25,7 @@ export const addContact = createAsyncThunk(
       const res = await createContact(value);
       return res;
     } catch (error) {
+      console.error(error);
       return rejectWithValue(error.message);
     }
   }
