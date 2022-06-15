@@ -5,13 +5,10 @@ import { toast } from 'react-toastify';
 import 'react-phone-input-2/lib/style.css';
 import { ClipLoader } from 'react-spinners';
 import { useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from '../../redux/contactsOperations';
-import {
-  getContactsValue,
-  getErrorValue,
-  // getIsLoadingValue,
-} from '../../redux/contactsSelectors';
+import { getContactsValue, getErrorValue } from '../../redux/contactsSelectors';
 import {
   FormBody,
   Title,
@@ -20,8 +17,6 @@ import {
   Error,
   PhoneField,
 } from './ContactsForm.styled';
-import { useEffect } from 'react';
-import { ErrorMessage as ErrorMessageComponent } from '../ui/ErrorMessage';
 
 const schema = yup.object().shape({
   name: yup
@@ -34,7 +29,6 @@ const schema = yup.object().shape({
 export const ContactsForm = () => {
   const [phone, setPhone] = useState('');
   const contacts = useSelector(getContactsValue);
-  // const isLoading = useSelector(getIsLoadingValue);
   const error = useSelector(getErrorValue);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
@@ -63,7 +57,7 @@ export const ContactsForm = () => {
     setPhone('');
   };
 
-  const createContact = (name, number) => {
+  const createContact = async (name, number) => {
     const contact = {
       id: nanoid(),
       name,
@@ -71,22 +65,19 @@ export const ContactsForm = () => {
     };
 
     setIsLoading(true);
-    dispatch(addContact(contact));
+    try {
+      await dispatch(addContact(contact)).unwrap();
+    } catch (error) {
+      toast('Something went wrong. Please reload the page');
+    }
   };
 
   useEffect(() => {
     setIsLoading(false);
   }, [contacts]);
 
-  useEffect(() => {
-    if (error) {
-      setIsLoading(false);
-    }
-  }, [error]);
-
   return (
     <>
-      {error && <ErrorMessageComponent message={error} />}
       <Formik
         initialValues={{
           name: '',

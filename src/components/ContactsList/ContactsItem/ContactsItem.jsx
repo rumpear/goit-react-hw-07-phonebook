@@ -1,29 +1,39 @@
+import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, Item, Text } from './ContactsItem.styled';
 import { VscClose } from 'react-icons/vsc';
-import { removeContact } from '../../../redux/contactsOperations';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
+import { removeContact } from '../../../redux/contactsOperations';
 import { getErrorValue } from '../../../redux/contactsSelectors';
-// import { ErrorMessage } from '../../ui/ErrorMessage';
 import { Loader } from '../../ui/Loader';
-import { useEffect } from 'react';
+import { Button, Item, Text } from './ContactsItem.styled';
 
 export const ContactsItem = ({ id, name, number }) => {
-  // const isLoading = useSelector(state => state.contacts.isLoading);
   const dispatch = useDispatch();
   const error = useSelector(getErrorValue);
   const [loading, setLoading] = useState(false);
 
-  const handleDeleteContact = currentId => {
+  const handleDeleteContact = async currentId => {
     if (id === currentId) setLoading(true);
-    dispatch(removeContact(currentId));
+    try {
+      await dispatch(removeContact(currentId)).unwrap();
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
-  useEffect(() => {
-    if (error) setLoading(false);
-    return;
-  }, [error]);
+  //* alternative
+  // const handleDeleteContact = currentId => {
+  //   if (id === currentId) setLoading(true);
+  //   dispatch(removeContact(currentId));
+  // };
+
+  // useEffect(() => {
+  //   if (error && loading) {
+  //     setLoading(false);
+  //     toast.error(error);
+  //   }
+  // }, [error, loading]);
 
   return (
     <Item>
@@ -35,8 +45,6 @@ export const ContactsItem = ({ id, name, number }) => {
         onClick={() => handleDeleteContact(id)}
       >
         {loading ? <Loader size={15} /> : <VscClose size={20} />}
-        {/* {loading && !error ? <Loader size={15} /> : <VscClose size={20} />} */}
-        {/* {error && <VscClose size={20} />} */}
       </Button>
     </Item>
   );

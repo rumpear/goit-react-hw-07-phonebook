@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { fetchContacts } from '../../redux/contactsOperations';
@@ -5,36 +6,55 @@ import {
   getContactsValue,
   getErrorValue,
   getFilterValue,
-  // getIsLoadingValue,
 } from '../../redux/contactsSelectors';
 import { ContactsItem } from './ContactsItem';
-// import { Loader } from '../ui/Loader';
-import { ErrorMessage } from '../ui/ErrorMessage';
+import { Loader } from '../ui/Loader';
 import { List, Text } from './ContactsList.styled';
-// import { useState } from 'react';
+import { useState } from 'react';
 
 export const ContactsList = () => {
   const contacts = useSelector(getContactsValue);
-  // const isLoading = useSelector(getIsLoadingValue);
-  // const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const error = useSelector(getErrorValue);
   const filterValue = useSelector(getFilterValue);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchContacts());
+    setIsLoading(true);
+  }, []);
+
+  useEffect(() => {
+    (async function () {
+      try {
+        await dispatch(fetchContacts()).unwrap();
+        setIsLoading(false);
+      } catch (error) {
+        toast('Something went wrong. Please reload the page');
+      }
+    })();
   }, [dispatch]);
+
+  //* alternative
+  // useEffect(() => {
+  //   dispatch(fetchContacts());
+  //   setIsLoading(false);
+  // }, [dispatch]);
+
+  // useEffect(() => {
+  //   if (error && isLoading) {
+  //     toast('Something went wrong. Please reload the page');
+  //     setIsLoading(false);
+  //   }
+  // }, [error, isLoading]);
 
   const filteredContacts = contacts.filter(({ name }) => {
     return name.toLowerCase().includes(filterValue.toLowerCase());
   });
 
-  // if (error) return <ErrorMessage message={error} />;
-  // if (isLoading) return <Loader size={50} />;
+  if (isLoading) return <Loader size={50} />;
 
   return (
     <div>
-      {error && <ErrorMessage message={error} />}
       {filteredContacts.length ? (
         <List>
           {filteredContacts.map(({ id, name, phone }) => (
