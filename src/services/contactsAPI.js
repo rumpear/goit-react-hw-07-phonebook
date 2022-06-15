@@ -9,11 +9,11 @@ export const getContacts = async () => {
 };
 
 export const createContact = async values => {
-  const { data } = await axios.post('/cotacts', values);
+  const { data } = await axios.post('/contacts', values);
   return data;
 };
 
 export const deleteContact = async id => {
-  const { data } = await axios.delete(`/conacts/${id}`);
+  const { data } = await axios.delete(`/contacts/${id}`);
   return data;
 };
